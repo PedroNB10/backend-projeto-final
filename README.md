@@ -9,8 +9,7 @@ $ git clone https://github.com/PedroNB10/backend-projeto-final.git
  
 # Acesse a pasta do projeto no terminal/cmd
 
-$ cd projeto-final-backend
-
+$ cd backend-projeto-final
 # Instale as dependências
 
 $ npm install
