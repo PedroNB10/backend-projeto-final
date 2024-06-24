@@ -1,0 +1,27 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Recomendação de Filmes",
+    "description": ""
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Servidor Local"
+    }
+  ],
+  "paths": {
+    "/example": {
+      "get": {
+        "summary": "Rota Exemplo",
+        "description": "Rota Exemplo",
+        "tags": ["Rota de Exemplo"],
+        "requestBody": {
+          "required": false,
+          "content": {}
+        },
+        "responses": {}
+      }
+    }
+  }
+}
