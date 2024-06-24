@@ -1,0 +1,1 @@
+local para salvar arquivos públicos como imagem por exemplo.
