@@ -3,6 +3,8 @@ import swaggerUI from "swagger-ui-express"; // lib para documentação das rotas
 
 import exampleRouter from "./routes/example.routes.js";
 import userRouter from "./routes/user.routes.js";
+import movieRouter from "./routes/movie.routes.js";
+import reviewRouter from "./routes/review.routes.js";
 import { createUserDatabaseFolder } from "./connection.db.js";
 import { getSwaggerDocs } from "./config.js";
 
@@ -30,3 +32,5 @@ app.use("/example", exampleRouter); // usa todas as rotas do arquivo example.rou
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 app.use("/user", userRouter);
+app.use("/movie", movieRouter);
+app.use("/review", reviewRouter);

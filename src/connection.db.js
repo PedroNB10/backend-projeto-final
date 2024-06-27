@@ -8,21 +8,59 @@ export const __dirname = path.dirname(__filename);
 
 export function createUserDatabaseFolder() {
   const databasefolderPath = path.join(__dirname, "../db");
-  const databasefilePath = path.join(databasefolderPath, "users.json");
+  const usersDatabasePath = path.join(databasefolderPath, "users.json");
+  const reviewsDatabasePath = path.join(databasefolderPath, "reviews.json");
+  const moviesDatabasePath = path.join(databasefolderPath, "movies.json");
 
   if (!fs.existsSync(databasefolderPath)) {
     fs.mkdirSync(databasefolderPath, { recursive: true });
     console.log("Directory created successfully.");
   }
 
-  if (!fs.existsSync(databasefilePath)) {
-    fs.writeFileSync(databasefilePath, "[]");
+  if (!fs.existsSync(usersDatabasePath)) {
+    fs.writeFileSync(usersDatabasePath, "[]");
+    console.log("File created successfully.");
+  }
+
+  if (!fs.existsSync(reviewsDatabasePath)) {
+    fs.writeFileSync(reviewsDatabasePath, "[]");
+    console.log("File created successfully.");
+  }
+
+  if (!fs.existsSync(moviesDatabasePath)) {
+    fs.writeFileSync(moviesDatabasePath, "[]");
     console.log("File created successfully.");
   }
 }
 
 export function getUsersRegistered() {
-  const databasefilePath = path.join(__dirname, "../db/users.json");
+  const usersDatabasePath = path.join(__dirname, "../db/users.json");
+
+  if (!fs.existsSync(usersDatabasePath)) {
+    fs.writeFileSync(usersDatabasePath, "[]");
+    console.log("File created successfully.");
+    return JSON.parse("[]");
+  }
+
+  const data = fs.readFileSync(usersDatabasePath, "utf8");
+  return JSON.parse(data);
+}
+
+export function getReviews() {
+  const databasefilePath = path.join(__dirname, "../db/reviews.json");
+
+  if (!fs.existsSync(databasefilePath)) {
+    fs.writeFileSync(databasefilePath, "[]");
+    console.log("File created successfully.");
+    return JSON.parse("[]");
+  }
+
+  const data = fs.readFileSync(databasefilePath, "utf8");
+  return JSON.parse(data);
+}
+
+export function getMovies() {
+  const databasefilePath = path.join(__dirname, "../db/movies.json");
 
   if (!fs.existsSync(databasefilePath)) {
     fs.writeFileSync(databasefilePath, "[]");
