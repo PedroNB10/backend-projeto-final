@@ -16,7 +16,7 @@ const port = 8080;
 // Lê o arquivo swagger.json e armazena em swaggerDocs
 let swaggerDocs = getSwaggerDocs();
 
-app.listen(8080, () => {
+app.listen(port, () => {
   console.log("Server is running on port localhost:" + port);
 });
 

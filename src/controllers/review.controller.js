@@ -10,7 +10,7 @@ import { User } from "../models/user.js";
 import { Movie } from "../models/movie.js";
 import { Review } from "../models/review.js";
 import * as userController from "../controllers/user.controller.js"; // importa todos os métodos do controller
-
+import * as movieController from "../controllers/movie.controller.js"; // importa todos os métodos do controller
 import path from "node:path";
 
 const reviewsDatabasePath = path.join(__dirname, "..", "db", "reviews.json");
@@ -47,8 +47,13 @@ export async function createReview(req, res) {
     release_date,
     poster_path
   );
-  reviews.push(review);
 
+  const movie = new Movie(movieId, title, overview, release_date, poster_path);
+  // cria o filme no banco de dados de filmes avaliados
+  movieController.createMovie(movie);
+
+  // adiciona a avaliação ao banco de dados de avaliações
+  reviews.push(review);
   userController.addLastReview(review);
 
   fs.writeFileSync(reviewsDatabasePath, JSON.stringify(reviews, null, 2));

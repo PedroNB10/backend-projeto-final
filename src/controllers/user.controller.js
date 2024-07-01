@@ -119,3 +119,21 @@ export async function addLastReview(review) {
     JSON.stringify(usuariosCadastrados, null, 2)
   );
 }
+
+export async function addFavoriteMovie(req, res) {
+  const usuariosCadastrados = getUsersRegistered(); // array de usuários cadastrados
+  const { userId, movieId } = req.body;
+
+  for (let user of usuariosCadastrados) {
+    if (user.id === userId) {
+      user.favoriteMovies.push(movieId);
+      fs.writeFileSync(
+        usersDatabasePath,
+        JSON.stringify(usuariosCadastrados, null, 2)
+      );
+      return res.status(200).send(`Filme adicionado com sucesso!`);
+    }
+  }
+
+  return res.status(404).send(`Usuario com id ${userId} não encontrado.`);
+}
