@@ -21,7 +21,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8080/user/9caff085-0649-405b-8c16-886436ccdf97
+GET http://localhost:8080/user/20917be5-6558-4f78-a951-b6d4f485d4f9
 
 
 ### 
@@ -30,9 +30,9 @@ POST http://localhost:8080/review/create
 Content-Type: application/json
 
 {
-  "content": "This is a great movie",
+  "content": "This is an amazing movie",
   "rating": 5,
-  "userId": "9caff085-0649-405b-8c16-886436ccdf9",
+  "userId": "20917be5-6558-4f78-a951-b6d4f485d4f9",
   "movieId": 112234,
   "title": "Inside Out 2",
   "overview": "Teenager Riley's mind headquarters is undergoing a sudden demolition to make room for something entirely unexpected: new Emotions! Joy, Sadness, Anger, Fear and Disgust, who’ve long been running a successful operation by all accounts, aren’t sure how to feel when Anxiety shows up. And it looks like she’s not alone.",
@@ -41,12 +41,16 @@ Content-Type: application/json
 
 }
 ###
+DELETE http://localhost:8080/review/delete/1
+
+
+###
 
 PUT http://localhost:8080/user/add/favorites
 Content-Type: application/json
 
 {
-  "userId": "9caff085-0649-405b-8c16-886436ccdf97",
+  "userId": "20917be5-6558-4f78-a951-b6d4f485d4f9",
   "movieId": 11224,
   "title": "Inside Out 2",
   "overview": "Teenager Riley's mind headquarters is undergoing a sudden demolition to make room for something entirely unexpected: new Emotions! Joy, Sadness, Anger, Fear and Disgust, who’ve long been running a successful operation by all accounts, aren’t sure how to feel when Anxiety shows up. And it looks like she’s not alone.",
@@ -55,7 +59,7 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:8080/user/remove/favorites
+DELETE http://localhost:8080/user/remove/favorites
 Content-Type: application/json
 
 {

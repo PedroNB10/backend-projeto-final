@@ -192,3 +192,16 @@ export async function addLastReview(review) {
     JSON.stringify(usuariosCadastrados, null, 2)
   );
 }
+
+export async function removeReview(reviewId) {
+  const usuariosCadastrados = getUsersRegistered(); // array de usuários cadastrados
+
+  for (let user of usuariosCadastrados) {
+    user.reviews = user.reviews.filter((review) => review.id !== reviewId);
+  }
+
+  fs.writeFileSync(
+    usersDatabasePath,
+    JSON.stringify(usuariosCadastrados, null, 2)
+  );
+}

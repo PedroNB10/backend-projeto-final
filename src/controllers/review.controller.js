@@ -14,9 +14,11 @@ import * as movieController from "../controllers/movie.controller.js"; // import
 import path from "node:path";
 
 const reviewsDatabasePath = path.join(__dirname, "..", "db", "reviews.json");
+const usersDatabasePath = path.join(__dirname, "..", "db", "users.json");
 
 export async function createReview(req, res) {
   const reviews = getReviews();
+  const users = getUsersRegistered();
   const {
     content,
     rating,
@@ -52,13 +54,82 @@ export async function createReview(req, res) {
   // cria o filme no banco de dados de filmes avaliados
   movieController.createMovie(movie);
 
-  // adiciona a avaliação ao banco de dados de avaliações
-  reviews.push(review);
-  userController.addLastReview(review);
+  // console.log(user.reviews);
+
+  const userReviews = user.reviews;
+  const isThereAReview = userReviews.find(
+    (review) => Number(review.movie.id) === Number(movieId)
+  );
+
+  if (isThereAReview) {
+    isThereAReview.content = content;
+    isThereAReview.rating = rating;
+    isThereAReview.date = new Date();
+    for (let i = 0; i < reviews.length; i++) {
+      if (reviews[i].id === isThereAReview.id) {
+        reviews[i] = isThereAReview;
+
+        for (let i = 0; i < user.reviews.length; i++) {
+          if (user.reviews[i].id === isThereAReview.id) {
+            user.reviews[i] = isThereAReview;
+
+            const userIndex = users.findIndex((user) => user.id === userId);
+
+            if (userIndex === -1) {
+              return res.status(404).send("Usuário não encontrado.");
+            }
+
+            users[userIndex] = user;
+            fs.writeFileSync(
+              reviewsDatabasePath,
+              JSON.stringify(reviews, null, 2)
+            );
+            fs.writeFileSync(usersDatabasePath, JSON.stringify(users, null, 2));
+          }
+        }
+
+        res
+          .status(200)
+          .send({ id: isThereAReview.id, message: "Avaliação atualizada!" });
+      }
+    }
+  } else {
+    reviews.push(review);
+    userController.addLastReview(review);
+    fs.writeFileSync(reviewsDatabasePath, JSON.stringify(reviews, null, 2));
+
+    res
+      .status(201)
+      .send({ id: review.id, message: "Avaliação criada com sucesso!" });
+  }
+}
+
+export async function deleteReview(req, res) {
+  const reviews = getReviews();
+  let { reviewId } = req.params;
+
+  reviewId = parseInt(reviewId);
+
+  const reviewIndex = reviews.findIndex((review) => review.id === reviewId);
+
+  if (reviewIndex === -1) {
+    return res.status(404).send("Review não encontrada.");
+  }
+
+  const review = reviews[reviewIndex];
+  const user = getUsersRegistered().find((user) => user.id === review.userId);
+
+  if (!user) {
+    return res.status(404).send("Usuário não encontrado.");
+  }
+
+  userController.removeReview(review);
+
+  reviews.splice(reviewIndex, 1);
 
   fs.writeFileSync(reviewsDatabasePath, JSON.stringify(reviews, null, 2));
 
-  res.status(201).send({ id: review.id, message: "Review created" });
+  res.status(200).send("Review removida com sucesso.");
 }
 
 export async function getReviewsByMovieId(req, res) {

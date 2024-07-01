@@ -3,5 +3,6 @@ import * as reviewController from "../controllers/review.controller.js"; // impo
 const router = express.Router();
 
 router.post("/create", reviewController.createReview);
+router.delete("/delete/:reviewId", reviewController.deleteReview);
 
 export default router;
