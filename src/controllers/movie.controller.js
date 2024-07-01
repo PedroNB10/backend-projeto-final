@@ -18,3 +18,8 @@ export async function createMovie(movie) {
   movies.push(newMovie);
   fs.writeFileSync(moviesDatabasePath, JSON.stringify(movies, null, 2));
 }
+
+export async function getMovieById(movieId) {
+  const movies = getMovies();
+  return movies.find((movie) => movie.id === movieId);
+}

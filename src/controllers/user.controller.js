@@ -9,6 +9,9 @@ import { User } from "../models/user.js";
 import { v4 as uuidv4 } from "uuid";
 import path from "node:path";
 
+import * as movieController from "../controllers/movie.controller.js";
+import { Movie } from "../models/movie.js";
+
 const usersDatabasePath = path.join(__dirname, "..", "db", "users.json");
 
 export async function createUser(req, res) {
@@ -84,7 +87,7 @@ export async function getUser(req, res) {
         username: user.username,
         email: user.email,
         favoriteMovies: user.favoriteMovies,
-        reviewedMovies: user.reviewedMovies,
+        reviews: user.reviews,
       };
       return res.status(200).json(userInfo);
     }
@@ -92,6 +95,76 @@ export async function getUser(req, res) {
 
   return res.status(404).send(`Usuario com id ${userId} não encontrado.`);
 }
+
+export async function addFavoriteMovie(req, res) {
+  const usuariosCadastrados = getUsersRegistered(); // array de usuários cadastrados
+  const { userId, movieId, title, overview, release_date, poster_path } =
+    req.body;
+
+  const user = await getUserById(userId);
+
+  if (!user) {
+    return res.status(404).send("Usuário não encontrado.");
+  }
+
+  let movie = await movieController.getMovieById(movieId);
+
+  if (!movie) {
+    movie = new Movie(movieId, title, overview, release_date, poster_path);
+    movieController.createMovie(movie);
+  }
+
+  for (let user of usuariosCadastrados) {
+    if (user.id === userId) {
+      for (let favoriteMovie of user.favoriteMovies) {
+        if (favoriteMovie.id === movieId) {
+          return res.status(409).send("Filme já está nos favoritos.");
+        }
+      }
+      user.favoriteMovies.push(movie);
+    }
+  }
+
+  fs.writeFileSync(
+    usersDatabasePath,
+    JSON.stringify(usuariosCadastrados, null, 2)
+  );
+
+  res.status(201).send("Filme adicionado aos favoritos com sucesso.");
+}
+
+export async function removeFavoriteMovie(req, res) {
+  const usuariosCadastrados = getUsersRegistered(); // array de usuários cadastrados
+  const { userId, movieId } = req.body;
+
+  const user = await getUserById(userId);
+  if (!user) {
+    return res.status(404).send("Usuário não encontrado.");
+  }
+
+  for (let user of usuariosCadastrados) {
+    if (user.id === userId) {
+      for (let favoriteMovie of user.favoriteMovies) {
+        if (favoriteMovie.id === movieId) {
+          user.favoriteMovies = user.favoriteMovies.filter(
+            (movie) => movie.id !== movieId
+          );
+          fs.writeFileSync(
+            usersDatabasePath,
+            JSON.stringify(usuariosCadastrados, null, 2)
+          );
+          return res
+            .status(200)
+            .send("Filme removido dos favoritos com sucesso.");
+        }
+      }
+    }
+  }
+
+  return res.status(404).send("Filme não encontrado nos favoritos.");
+}
+
+// funções auxiliares
 
 export async function getUserById(userId) {
   const usuariosCadastrados = getUsersRegistered(); // array de usuários cadastrados
@@ -118,22 +191,4 @@ export async function addLastReview(review) {
     usersDatabasePath,
     JSON.stringify(usuariosCadastrados, null, 2)
   );
-}
-
-export async function addFavoriteMovie(req, res) {
-  const usuariosCadastrados = getUsersRegistered(); // array de usuários cadastrados
-  const { userId, movieId } = req.body;
-
-  for (let user of usuariosCadastrados) {
-    if (user.id === userId) {
-      user.favoriteMovies.push(movieId);
-      fs.writeFileSync(
-        usersDatabasePath,
-        JSON.stringify(usuariosCadastrados, null, 2)
-      );
-      return res.status(200).send(`Filme adicionado com sucesso!`);
-    }
-  }
-
-  return res.status(404).send(`Usuario com id ${userId} não encontrado.`);
 }

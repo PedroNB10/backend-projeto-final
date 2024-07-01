@@ -31,7 +31,7 @@ export async function createReview(req, res) {
   const user = getUsersRegistered().find((user) => user.id === userId);
 
   if (!user) {
-    return res.status(400).send("User not found");
+    return res.status(400).send("Usuário não encontrado.");
   }
 
   const id = reviews.length + 1;

@@ -4,6 +4,7 @@ const router = express.Router();
 
 router.post("/create", userController.createUser);
 router.post("/login", userController.loginUser);
-router.get("/:userId", userController.getUser); // busca as informações do usuário como nome, email, filmes favoritos e filmes avaliados
-
+router.get("/:userId", userController.getUser); // busca as informações do usuário como nome, email, filmes favoritos e avaliações
+router.put("/add/favorites", userController.addFavoriteMovie);
+router.put("/remove/favorites", userController.removeFavoriteMovie);
 export default router;
