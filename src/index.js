@@ -1,5 +1,6 @@
 import express from "express"; // lib para criar o servidor
 import swaggerUI from "swagger-ui-express"; // lib para documentação das rotas
+import cors from "cors"; // lib para permitir requisições de outros servidores
 
 import exampleRouter from "./routes/example.routes.js";
 import userRouter from "./routes/user.routes.js";
@@ -12,7 +13,7 @@ createUserDatabaseFolder();
 
 const app = express();
 const port = 8080;
-
+app.use(cors());
 // Lê o arquivo swagger.json e armazena em swaggerDocs
 let swaggerDocs = getSwaggerDocs();
 
