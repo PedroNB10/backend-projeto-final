@@ -8,12 +8,14 @@ import movieRouter from "./routes/movie.routes.js";
 import reviewRouter from "./routes/review.routes.js";
 import { createUserDatabaseFolder } from "./connection.db.js";
 import { getSwaggerDocs } from "./config.js";
+import cookieParser from "cookie-parser";
 
 createUserDatabaseFolder();
 
 const app = express();
 const port = 8080;
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cookieParser());
 // Lê o arquivo swagger.json e armazena em swaggerDocs
 let swaggerDocs = getSwaggerDocs();
 
@@ -33,5 +35,5 @@ app.use("/example", exampleRouter); // usa todas as rotas do arquivo example.rou
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 app.use("/user", userRouter);
-app.use("/movie", movieRouter);
+app.use("/movies", movieRouter);
 app.use("/review", reviewRouter);

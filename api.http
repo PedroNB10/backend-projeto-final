@@ -66,3 +66,12 @@ Content-Type: application/json
   "userId": "9caff085-0649-405b-8c16-886436ccdf97",
   "movieId": 11224
 }
+
+### listagem de filmes de forma randômica indicando a página
+ 
+GET http://localhost:8080/movies/page/2
+
+
+### listagem de filmes pelo que está sendo pesquisado
+
+GET http://localhost:8080/movies/search/page/1?query=vingadores

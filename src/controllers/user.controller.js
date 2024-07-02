@@ -66,7 +66,28 @@ export async function loginUser(req, res) {
         //O primeiro parametro é o que queremos serializar (o proprio user)
         //O segundo parametro é a chave secreta do token. Está no arquivo .env
         //La coloquei as instruções de como gerar
-        const tokenAcesso = jwt.sign({ user }, process.env.TOKEN);
+        const tokenAcesso = jwt.sign(
+          { user },
+          process.env.JWT_SECRET, // JWT SECRET
+          { expiresIn: "3600s" }
+        );
+
+        res.cookie(process.env.ACCESS_TOKEN, tokenAcesso, {
+          httpOnly: true,
+          secure: true,
+          path: "/",
+        });
+
+        const refreshToken = jwt.sign({ user }, process.env.JWT_SECRET, {
+          expiresIn: "1d",
+        });
+
+        res.cookie(process.env.REFRESH_TOKEN, refreshToken, {
+          httpOnly: true,
+          secure: true,
+          path: "/",
+        });
+
         return res.status(200).json(tokenAcesso);
       } else return res.status(422).send(`Usuario ou senhas incorretas.`);
     }
