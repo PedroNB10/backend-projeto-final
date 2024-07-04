@@ -185,6 +185,154 @@ export async function removeFavoriteMovie(req, res) {
   return res.status(404).send("Filme não encontrado nos favoritos.");
 }
 
+export async function updatePassword(req, res) {
+  const userId = req.params.userId;
+  // Extrai as informações de senha atual e nova senha do corpo da requisição
+  const { currentPassword, newPassword } = req.body;
+
+  try {
+    // Obtém usuários registrados do banco
+    const usuariosCadastrados = getUsersRegistered();
+
+    // Encontra o usuário com base no ID 
+    const userIndex = usuariosCadastrados.findIndex(user => user.id === userId);
+
+    if (userIndex === -1) {
+      return res.status(404).json({ message: 'Usuário não encontrado' });
+    }
+
+    // Obtém o usuário específico 
+    const user = usuariosCadastrados[userIndex];
+
+    // Verifica se a senha atual fornecida corresponde à senha armazenada
+    const isPasswordMatch = await bcrypt.compare(currentPassword, user.password);
+
+    if (!isPasswordMatch) {
+      return res.status(401).json({ message: 'Senha atual incorreta' });
+    }
+
+    // Criptografa a nova senha
+    const salt = await bcrypt.genSalt(10);
+    const passwordCrypt = await bcrypt.hash(newPassword, salt);
+
+    // Atualiza a senha no objeto do usuário
+    user.password = passwordCrypt;
+
+    // Atualiza o usuário no banco 
+    usuariosCadastrados[userIndex] = user;
+    fs.writeFileSync(usersDatabasePath, JSON.stringify(usuariosCadastrados, null, 2));
+
+      // Gera novo token de acesso
+      const tokenAcesso = jwt.sign(
+        { user },
+        process.env.JWT_SECRET,
+        { expiresIn: '3600s' }
+      );
+  
+      // Gera novo token de refresh
+      const refreshToken = jwt.sign(
+        { user },
+        process.env.JWT_SECRET,
+        { expiresIn: '1d' }
+      );
+  
+      // Define cookie com o token de acesso
+      res.cookie(process.env.ACCESS_TOKEN, tokenAcesso, {
+        httpOnly: true,
+        secure: true,
+        path: '/',
+      });
+  
+      // Define cookie com o token de refresh
+      res.cookie(process.env.REFRESH_TOKEN, refreshToken, {
+        httpOnly: true,
+        secure: true,
+        path: '/',
+      });
+  
+      // Retorna resposta de sucesso
+      return res.status(200).json({ message: 'Senha atualizada com sucesso' });  
+
+  } catch (error) {
+    console.error('Erro ao atualizar senha:', error);
+    return res.status(500).json({ message: 'Erro ao atualizar senha' });
+  }
+}
+
+export async function updateEmail(req, res) {
+  const userId = req.params.userId;
+  const { newEmail } = req.body;
+
+  try {
+    // Obtém usuários registrados do banco
+    const usuariosCadastrados = getUsersRegistered();
+
+    // Encontra o usuário com base no ID 
+    const userIndex = usuariosCadastrados.findIndex(user => user.id === userId);
+
+    if (userIndex === -1) {
+      return res.status(404).json({ message: 'Usuário não encontrado' });
+    }
+
+    // Obtém o usuário específico 
+    const user = usuariosCadastrados[userIndex];
+
+    // Verifica se o novo email é diferente do email atual
+    if (user.email === newEmail) {
+      return res.status(400).json({ message: 'O novo email deve ser diferente do email cadastrado' });
+    }
+
+    // Verifica se o novo email já está em uso por outro usuário
+    const emailAlreadyInUse = usuariosCadastrados.some(user => user.email === newEmail);
+    if (emailAlreadyInUse) {
+      return res.status(400).json({ message: 'O email já está em uso' });
+    }
+
+    // Atualiza o email do usuário
+    user.email = newEmail;
+
+    // Atualiza o usuário no banco
+    usuariosCadastrados[userIndex] = user;
+    fs.writeFileSync(path.join(__dirname, '../db/users.json'), JSON.stringify(usuariosCadastrados, null, 2));
+
+    // Gera novo token de acesso
+    const tokenAcesso = jwt.sign(
+      { user },
+      process.env.JWT_SECRET,
+      { expiresIn: '3600s' }
+    );
+
+    const refreshToken = jwt.sign(
+      { user },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    // Define cookie com o token de acesso
+    res.cookie(process.env.ACCESS_TOKEN, tokenAcesso, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      path: '/',
+    });
+
+    // Define cookie com o token de refresh
+    res.cookie(process.env.REFRESH_TOKEN, refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      path: '/',
+    });
+
+    // Retorna uma resposta de sucesso
+    return res.status(200).json({ message: 'Email atualizado com sucesso' });
+
+  } catch (error) {
+    console.error('Erro ao atualizar email:', error);
+    return res.status(500).json({ message: 'Erro ao atualizar email' });
+  }
+}
+
 // funções auxiliares
 
 export async function getUserById(userId) {

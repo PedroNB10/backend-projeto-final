@@ -2,9 +2,9 @@ POST http://localhost:8080/user/create
 Content-Type: application/json
 
 {
-  "username": "John Doe",
-  "password": "password",
-  "email": "johna@email.com"
+  "username": "Luara",
+  "password": "SenhaTeste",
+  "email": "luara@email.com"
 }
 
 ###
@@ -75,3 +75,23 @@ GET http://localhost:8080/movies/page/2
 ### listagem de filmes pelo que está sendo pesquisado
 
 GET http://localhost:8080/movies/search/page/1?query=vingadores
+
+
+### atualizar senha do usuário
+
+PUT http://localhost:8080/user/update-password/00bd1d20-b3e5-422f-a59f-ffa26d514b05
+Content-Type: application/json
+
+{
+  "currentPassword": "SenhaTeste",
+  "newPassword": "SenhaTeste2"
+}
+
+### atualizar email
+PUT http://localhost:8080/user/update-email/00bd1d20-b3e5-422f-a59f-ffa26d514b05
+Content-Type: application/json
+
+{
+  "currentEmail": "luara@email.com",
+  "newEmail": "luaraupdate@email.com"
+}

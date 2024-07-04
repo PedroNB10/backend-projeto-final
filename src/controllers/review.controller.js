@@ -149,3 +149,6 @@ export async function getReviewsByUserId(req, res) {
 
   res.send(reviewsByUserId);
 }
+
+// atualizar review - usar id do usuário e id da avaliação
+// atualizar todos os valores da review (content, rating e date)
