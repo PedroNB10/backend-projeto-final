@@ -152,3 +152,36 @@ export async function getReviewsByUserId(req, res) {
 
 // atualizar review - usar id do usuário e id da avaliação
 // atualizar todos os valores da review (content, rating e date)
+
+export async function updateReview(req, res) {
+  // Obtém o ID do usuário e da review pelos parâmetros da URL
+  const userId = req.params.userId; 
+  const reviewId = parseInt(req.params.reviewId); // Converte para número
+  const { content, rating } = req.body  ;// Obtém o novo conteúdo e avaliação da review
+
+  try {
+    // Obtém todas as reviews do banco
+    const reviews = getReviews();
+
+    // Encontra a review com base no reviewId e userId
+    const reviewIndex = reviews.findIndex(review => review.id === reviewId && review.userId === userId);
+
+    if (reviewIndex === -1) {
+      return res.status(404).json({ message: 'Review não encontrada' });
+    }
+
+    // Atualiza os campos da review (conteúdo, avaliação e data)
+    reviews[reviewIndex].content = content; 
+    reviews[reviewIndex].rating = rating; 
+    reviews[reviewIndex].date = new Date();
+
+    // Salva as reviews de volta no banco (arquivo)
+    fs.writeFileSync(reviewsDatabasePath, JSON.stringify(reviews, null, 2));
+
+    // Retorna uma resposta de sucesso
+    return res.status(200).json({ message: 'Review atualizada com sucesso', review: reviews[reviewIndex] });
+  } catch (error) {
+    console.error('Erro ao atualizar review:', error);
+    return res.status(500).json({ message: 'Erro ao atualizar review' });
+  }
+}

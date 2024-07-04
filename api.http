@@ -95,3 +95,12 @@ Content-Type: application/json
   "currentEmail": "luara@email.com",
   "newEmail": "luaraupdate@email.com"
 }
+
+### atualizar review
+PUT http://localhost:8080/review/update-review/ecf7a670-5d80-4a03-835d-5f4a41619ba7/2
+Content-Type: application/json
+
+{
+  "content": "Bom filme",
+  "rating": 4
+}
