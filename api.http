@@ -1,14 +1,23 @@
+# Rota para criar um usuário: POST http://localhost:8080/user/create
+# JSON contém os seguintes campos:
+# - username: nome do usuário tipo: string
+# - password: senha do usuário tipo: string
+# - email: email do usuário tipo: string
 POST http://localhost:8080/user/create
 Content-Type: application/json
 
 {
   "username": "Luara",
   "password": "SenhaTeste",
-  "email": "luara@email.com"
+  "email": "luaraa@email.com"
 }
-
 ###
 
+
+# Rota para fazer login: POST http://localhost:8080/user/login
+# JSON contém os seguintes campos:
+# - email: email do usuário tipo: string
+# - password: senha do usuário tipo: string
 POST http://localhost:8080/user/login
 Content-Type: application/json
 
@@ -17,15 +26,55 @@ Content-Type: application/json
   "email": "johna@email.com",
   "password": "password"
 }
-
-
 ###
 
-GET http://localhost:8080/user/20917be5-6558-4f78-a951-b6d4f485d4f9
 
-
+# Rota para listar os filmes favoritos e avaliações de um usuário: GET http://localhost:8080/user/{userId}
+# userId: id do usuário tipo: string
+GET http://localhost:8080/user/54168e91-7ae8-459b-a0f8-419d5b715bef
 ### 
 
+
+### Rota para atualizar a senha de um usuário: PUT http://localhost:8080/user/update-password/{userId}
+# userId: id do usuário que terá a senha atualizada tipo: string
+
+# JSON contém os seguintes campos:
+# - currentPassword: senha atual do usuário tipo: string
+# - newPassword: nova senha do usuário tipo: string
+PUT http://localhost:8080/user/update-password/00bd1d20-b3e5-422f-a59f-ffa26d514b05
+Content-Type: application/json
+
+{
+  "currentPassword": "SenhaTeste",
+  "newPassword": "SenhaTeste2"
+}
+
+
+### Rota para atualizar o email de um usuário: PUT http://localhost:8080/user/update-email/{userId}
+# userId: id do usuário que terá o email atualizado tipo: string
+
+# JSON contém os seguintes campos:
+# - currentEmail: email atual do usuário tipo: string
+# - newEmail: novo email do usuário tipo: string
+PUT http://localhost:8080/user/update-email/00bd1d20-b3e5-422f-a59f-ffa26d514b05
+Content-Type: application/json
+
+{
+  "currentEmail": "luara@email.com",
+  "newEmail": "luaraupdate@email.com"
+}
+
+# Rota para criar um review: POST http://localhost:8080/review/create
+
+# JSON contém os seguintes campos:
+# - content: conteúdo do review tipo: string
+# - rating: nota do review tipo: int
+# - userId: id do usuário que fez o review tipo: string
+# - movieId: id do filme que está sendo avaliado tipo: int
+# - title: título do filme tipo: string
+# - overview: descrição do filme tipo: string
+# - release_date: data de lançamento do filme tipo: string
+# - poster_path: caminho da imagem do filme tipo: string
 POST http://localhost:8080/review/create
 Content-Type: application/json
 
@@ -41,11 +90,42 @@ Content-Type: application/json
 
 }
 ###
-DELETE http://localhost:8080/review/delete/1
 
 
+# Rota para atualizar um review: PUT http://localhost:8080/review/update-review/{userId}/{reviewId}
+# userId: id do usuário que fez o review tipo: string
+# reviewId: id do review que será atualizado tipo: int
+
+# JSON contém os seguintes campos:
+# - content: conteúdo do review tipo: string
+# - rating: nota do review tipo: int
+PUT http://localhost:8080/review/update-review/ecf7a670-5d80-4a03-835d-5f4a41619ba7/2
+Content-Type: application/json
+
+{
+  "content": "Bom filme",
+  "rating": 4
+}
 ###
 
+
+# Rota para deletar um review: DELETE http://localhost:8080/review/delete/{reviewId}
+# reviewId: id do review que será deletado tipo: int
+DELETE http://localhost:8080/review/delete/1
+###
+
+
+
+
+
+# Rota para adicionar um filme aos favoritos de um usuário: PUT http://localhost:8080/user/add/favorites
+# JSON contém os seguintes campos:
+# - userId: id do usuário que está adicionando o filme aos favoritos tipo: string
+# - movieId: id do filme que está sendo adicionado aos favoritos tipo: int
+# - title: título do filme tipo: string
+# - overview: descrição do filme tipo: string
+# - release_date: data de lançamento do filme tipo: string
+# - poster_path: caminho da imagem do filme tipo: string
 PUT http://localhost:8080/user/add/favorites
 Content-Type: application/json
 
@@ -57,8 +137,12 @@ Content-Type: application/json
   "release_date": "2024-06-11",
   "poster_path": "/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg"
 }
-
 ###
+
+# Rota para remover um filme dos favoritos de um usuário: DELETE http://localhost:8080/user/remove/favorites
+# JSON contém os seguintes campos:
+# - userId: id do usuário que está removendo o filme dos favoritos tipo: string
+# - movieId: id do filme que está sendo removido dos favoritos tipo: int
 DELETE http://localhost:8080/user/remove/favorites
 Content-Type: application/json
 
@@ -66,41 +150,18 @@ Content-Type: application/json
   "userId": "9caff085-0649-405b-8c16-886436ccdf97",
   "movieId": 11224
 }
-
-### listagem de filmes de forma randômica indicando a página
- 
-GET http://localhost:8080/movies/page/2
+###
 
 
-### listagem de filmes pelo que está sendo pesquisado
+# Rota para listar os filmes da API externa: GET http://localhost:8080/movies/page/{page}
+# page: número da página que será listada tipo: int
+GET http://localhost:8080/movies/page/1
+###
 
+
+# Rota para buscar filmes da API externa: GET http://localhost:8080/movies/search/page/{searchPage}?query={query}
+# searchPage: número da página que será listada tipo: int
+# query: termo de busca para a pesquisa tipo: string
 GET http://localhost:8080/movies/search/page/1?query=vingadores
+###
 
-
-### atualizar senha do usuário
-
-PUT http://localhost:8080/user/update-password/00bd1d20-b3e5-422f-a59f-ffa26d514b05
-Content-Type: application/json
-
-{
-  "currentPassword": "SenhaTeste",
-  "newPassword": "SenhaTeste2"
-}
-
-### atualizar email
-PUT http://localhost:8080/user/update-email/00bd1d20-b3e5-422f-a59f-ffa26d514b05
-Content-Type: application/json
-
-{
-  "currentEmail": "luara@email.com",
-  "newEmail": "luaraupdate@email.com"
-}
-
-### atualizar review
-PUT http://localhost:8080/review/update-review/ecf7a670-5d80-4a03-835d-5f4a41619ba7/2
-Content-Type: application/json
-
-{
-  "content": "Bom filme",
-  "rating": 4
-}
