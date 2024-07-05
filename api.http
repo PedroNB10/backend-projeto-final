@@ -128,6 +128,13 @@ Content-Type: application/json
   "poster_path": "/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg"
 
 }
+
+# Tipos de responses:
+# 201 - Created: Review criado com sucesso
+# 200 - OK: Review atualizado com sucesso (acontece quando o usuário já fez um review para o filme)
+# 400 - Bad Request: Preencha todos os campos obrigatórios.
+# 404 - Not Found: Usuário não encontrado.
+# 500 - Internal Server Error: Erro ao criar review.
 ### FIM ROTA
 
 
@@ -145,12 +152,23 @@ Content-Type: application/json
   "content": "Bom filme",
   "rating": 4
 }
+
+# Tipos de responses:
+# 200 - OK: Review atualizado com sucesso
+# 400 - Bad Request: Preencha todos os campos obrigatórios.
+# 404 - Not Found: Usuário ou review não encontrado.
+# 500 - Internal Server Error: Erro ao atualizar review.
 ### FIM ROTA
 
 
 # Rota para deletar um review: DELETE http://localhost:8080/review/delete/{reviewId}
 # reviewId: id do review que será deletado tipo: int
 DELETE http://localhost:8080/review/delete/1
+# Tipos de responses:
+# 200 - OK: Review deletado com sucesso
+# 404 - Not Found: Review não encontrado.
+# 404 - Not Found: Usuário não encontrado.
+# 500 - Internal Server Error: Erro ao deletar review.
 ### FIM ROTA
 
 
