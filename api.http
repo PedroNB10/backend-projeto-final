@@ -47,7 +47,7 @@ Content-Type: application/json
 
 # Rota para listar os filmes favoritos e avaliações de um usuário: GET http://localhost:8080/user/{userId}
 # userId: id do usuário tipo: string
-GET http://localhost:8080/user/ce8a1fb1-5fe4-4513-a78c-fa86d80bb26f
+GET http://localhost:8080/user/703162ed-49c4-4374-a579-440122808b6a
 ### 
 
 # Tipos de responses:
@@ -118,9 +118,9 @@ POST http://localhost:8080/review/create
 Content-Type: application/json
 
 {
-  "content": "This is an amazing movie",
+  "content": "Filme muito bom",
   "rating": 5,
-  "userId": "ce8a1fb1-5fe4-4513-a78c-fa86d80bb26f",
+  "userId": "703162ed-49c4-4374-a579-440122808b6a",
   "movieId": 112234,
   "title": "Inside Out 2",
   "overview": "Teenager Riley's mind headquarters is undergoing a sudden demolition to make room for something entirely unexpected: new Emotions! Joy, Sadness, Anger, Fear and Disgust, who’ve long been running a successful operation by all accounts, aren’t sure how to feel when Anxiety shows up. And it looks like she’s not alone.",
@@ -145,12 +145,12 @@ Content-Type: application/json
 # JSON contém os seguintes campos:
 # - content: conteúdo do review tipo: string
 # - rating: nota do review tipo: int
-PUT http://localhost:8080/review/update-review/ecf7a670-5d80-4a03-835d-5f4a41619ba7/2
+PUT http://localhost:8080/review/update-review/703162ed-49c4-4374-a579-440122808b6a/3
 Content-Type: application/json
 
 {
-  "content": "Bom filme",
-  "rating": 4
+  "content": "Não é muito bom",
+  "rating": 2
 }
 
 # Tipos de responses:
