@@ -181,6 +181,7 @@ export async function updateReview(req, res) {
   try {
     // Obtém todas as reviews do banco
     const reviews = getReviews();
+    const users = getUsersRegistered();
 
     // Encontra a review com base no reviewId e userId
     const reviewIndex = reviews.findIndex(
@@ -198,6 +199,22 @@ export async function updateReview(req, res) {
 
     // Salva as reviews de volta no banco (arquivo)
     fs.writeFileSync(reviewsDatabasePath, JSON.stringify(reviews, null, 2));
+
+    // Atualiza a review correspondente no users.json
+    const userIndex = users.findIndex(user => user.id === userId);
+    if (userIndex !== -1) {
+      const userReviewIndex = users[userIndex].reviews.findIndex(
+        (review) => review.id === reviewId
+      );
+
+      if (userReviewIndex !== -1) {
+        // Atualiza a review no objeto do usuário
+        users[userIndex].reviews[userReviewIndex] = reviews[reviewIndex];
+      }
+    }
+
+    // Salva os usuários atualizados de volta no banco 
+    fs.writeFileSync(usersDatabasePath, JSON.stringify(users, null, 2));
 
     // Retorna uma resposta de sucesso
     return res.status(200).json({
