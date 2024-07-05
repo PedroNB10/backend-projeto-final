@@ -194,6 +194,13 @@ Content-Type: application/json
   "release_date": "2024-06-11",
   "poster_path": "/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg"
 }
+
+# Tipos de responses:
+# 200 - OK: Filme adicionado aos favoritos com sucesso
+# 404 - Not Found: Filme não encontrado.
+# 404 - Not Found: Usuário não encontrado.
+# 500 - Internal Server Error: Erro ao adicionar filme aos favoritos.
+
 ### FIM ROTA
 
 # Rota para remover um filme dos favoritos de um usuário: DELETE http://localhost:8080/user/remove/favorites
@@ -207,6 +214,12 @@ Content-Type: application/json
   "userId": "9caff085-0649-405b-8c16-886436ccdf97",
   "movieId": 11224
 }
+
+# Tipos de responses:
+# 200 - OK: Filme removido dos favoritos com sucesso
+# 404 - Not Found: Filme não encontrado.
+# 404 - Not Found: Usuário não encontrado.
+# 500 - Internal Server Error: Erro ao remover filme dos favoritos.
 ### FIM ROTA
 
 
