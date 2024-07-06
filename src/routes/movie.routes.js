@@ -4,15 +4,14 @@ import { jwtAuthMiddlewareCookie } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-
 router.get(
   "/page/:page",
-
+  jwtAuthMiddlewareCookie,
   movieController.getMoviesApi
 );
 router.get(
   "/search/page/:searchPage",
-
+  jwtAuthMiddlewareCookie,
   movieController.getMoviesBySearch
 );
 

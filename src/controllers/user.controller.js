@@ -85,7 +85,7 @@ export async function loginUser(req, res) {
           const tokenAcesso = jwt.sign(
             { user },
             process.env.JWT_SECRET, // JWT SECRET
-            { expiresIn: "20s" }
+            { expiresIn: process.env.EXPIRATION_TIME_ACCESS_TOKEN }
           );
 
           res.cookie(process.env.ACCESS_TOKEN, tokenAcesso, {
@@ -95,7 +95,7 @@ export async function loginUser(req, res) {
           });
 
           const refreshToken = jwt.sign({ user }, process.env.JWT_SECRET, {
-            expiresIn: "1d",
+            expiresIn: process.env.EXPIRATION_TIME_REFRESH_TOKEN,
           });
 
           res.cookie(process.env.REFRESH_TOKEN, refreshToken, {
@@ -301,12 +301,12 @@ export async function updatePassword(req, res) {
 
     // Gera novo token de acesso
     const tokenAcesso = jwt.sign({ user }, process.env.JWT_SECRET, {
-      expiresIn: "3600s",
+      expiresIn: process.env.EXPIRATION_TIME_ACCESS_TOKEN,
     });
 
     // Gera novo token de refresh
     const refreshToken = jwt.sign({ user }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
+      expiresIn: process.env.EXPIRATION_TIME_REFRESH_TOKEN,
     });
 
     // Define cookie com o token de acesso
@@ -384,11 +384,11 @@ export async function updateEmail(req, res) {
 
     // Gera novo token de acesso
     const tokenAcesso = jwt.sign({ user }, process.env.JWT_SECRET, {
-      expiresIn: "3600s",
+      expiresIn: process.env.EXPIRATION_TIME_ACCESS_TOKEN,
     });
 
     const refreshToken = jwt.sign({ user }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
+      expiresIn: process.env.EXPIRATION_TIME_REFRESH_TOKEN,
     });
 
     // Define cookie com o token de acesso

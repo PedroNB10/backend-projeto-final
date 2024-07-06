@@ -4,8 +4,16 @@ import { jwtAuthMiddlewareCookie } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.post("/create", reviewController.createReview);
-router.delete("/delete/:userId/:reviewId", reviewController.deleteReview);
-router.put("/update-review/:userId/:reviewId", reviewController.updateReview); // rota PUT para atualizar uma review
+router.post("/create", jwtAuthMiddlewareCookie, reviewController.createReview);
+router.delete(
+  "/delete/:userId/:reviewId",
+  jwtAuthMiddlewareCookie,
+  reviewController.deleteReview
+);
+router.put(
+  "/update-review/:userId/:reviewId",
+  jwtAuthMiddlewareCookie,
+  reviewController.updateReview
+); // rota PUT para atualizar uma review
 
 export default router;

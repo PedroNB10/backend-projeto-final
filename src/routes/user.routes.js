@@ -6,9 +6,25 @@ const router = express.Router();
 
 router.post("/create", userController.createUser);
 router.post("/login", userController.loginUser);
-router.get("/:userId", userController.getUser); // busca as informações do usuário como nome, email, filmes favoritos e avaliações
-router.put("/add/favorites", userController.addFavoriteMovie);
-router.delete("/remove/favorites", userController.removeFavoriteMovie);
-router.put("/update-password/:userId", userController.updatePassword);  // rota PUT para atualização de dados
-router.put('/update-email/:userId', userController.updateEmail);
+router.get("/:userId", jwtAuthMiddlewareCookie, userController.getUser); // busca as informações do usuário como nome, email, filmes favoritos e avaliações
+router.put(
+  "/add/favorites",
+  jwtAuthMiddlewareCookie,
+  userController.addFavoriteMovie
+);
+router.delete(
+  "/remove/favorites",
+  jwtAuthMiddlewareCookie,
+  userController.removeFavoriteMovie
+);
+router.put(
+  "/update-password/:userId",
+  jwtAuthMiddlewareCookie,
+  userController.updatePassword
+); // rota PUT para atualização de dados
+router.put(
+  "/update-email/:userId",
+  jwtAuthMiddlewareCookie,
+  userController.updateEmail
+);
 export default router;
