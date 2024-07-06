@@ -127,34 +127,47 @@ export async function createReview(req, res) {
 }
 
 export async function deleteReview(req, res) {
-  let { reviewId } = req.params;
+  let { userId, reviewId } = req.params; // Obtém os IDs do usuário e da review dos parâmetros da URL
 
-  if (!reviewId) {
-    return res.status(400).send("ID da review é obrigatório.");
+  // Verifica se ambos os parâmetros foram fornecidos
+  if (!userId || !reviewId) {
+    return res.status(400).send("Preencha todos os campos obrigatórios.");
   }
 
   try {
-    reviewId = parseInt(reviewId);
+    reviewId = parseInt(reviewId); // Converte reviewId para um número inteiro
 
+    // Obtém a lista de reviews do arquivo JSON
     const reviews = getReviews();
+
+    // Obtém a lista de usuários do arquivo JSON
+    const users = getUsersRegistered();
+
+    // Encontra o índice da review na lista de reviews pelo ID da review
     const reviewIndex = reviews.findIndex((review) => review.id === reviewId);
 
     if (reviewIndex === -1) {
       return res.status(404).send("Review não encontrada.");
     }
 
-    const review = reviews[reviewIndex];
-    const user = getUsersRegistered().find((user) => user.id === review.userId);
+    // Encontra o índice do usuário na lista de usuários pelo ID do usuário
+    const userIndex = users.findIndex((user) => user.id === userId);
 
-    if (!user) {
+    if (userIndex === -1) {
       return res.status(404).send("Usuário não encontrado.");
     }
 
-    userController.removeReview(review);
+    // Remove a review do usuário no arquivo users.json
+    users[userIndex].reviews = users[userIndex].reviews.filter(
+      (userReview) => userReview.id !== reviewId
+    );
 
+    // Remove a review do array de reviews geral
     reviews.splice(reviewIndex, 1);
 
+    // Salva as reviews e os usuários de volta nos arquivos de banco de dados
     fs.writeFileSync(reviewsDatabasePath, JSON.stringify(reviews, null, 2));
+    fs.writeFileSync(usersDatabasePath, JSON.stringify(users, null, 2));
 
     return res.status(200).send("Review removida com sucesso.");
   } catch (error) {
@@ -162,9 +175,6 @@ export async function deleteReview(req, res) {
     return res.status(500).json({ message: "Erro ao deletar review" });
   }
 }
-
-// atualizar review - usar id do usuário e id da avaliação
-// atualizar todos os valores da review (content, rating e date)
 
 export async function updateReview(req, res) {
   // Obtém o ID do usuário e da review pelos parâmetros da URL
