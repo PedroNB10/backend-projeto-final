@@ -89,7 +89,7 @@ export async function loginUser(req, res) {
 
           return res.status(200).send({
             message: "Usuário Logado com sucesso!",
-            acessToken: tokenAcesso,
+            accessToken: tokenAcesso,
             userId: user.id,
           });
         } else return res.status(401).send(`Usuario ou senhas incorretas.`);
