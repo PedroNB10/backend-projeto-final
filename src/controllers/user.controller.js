@@ -84,27 +84,14 @@ export async function loginUser(req, res) {
           //La coloquei as instruções de como gerar
           const tokenAcesso = jwt.sign(
             { user },
-            process.env.JWT_SECRET, // JWT SECRET
-            { expiresIn: "20s" }
+            process.env.JWT_SECRET // JWT SECRET
           );
 
-          res.cookie(process.env.ACCESS_TOKEN, tokenAcesso, {
-            httpOnly: true,
-            secure: true,
-            path: "/",
+          return res.status(200).send({
+            message: "Usuário Logado com sucesso!",
+            acessToken: tokenAcesso,
+            userId: user.id,
           });
-
-          const refreshToken = jwt.sign({ user }, process.env.JWT_SECRET, {
-            expiresIn: "1d",
-          });
-
-          res.cookie(process.env.REFRESH_TOKEN, refreshToken, {
-            httpOnly: true,
-            secure: true,
-            path: "/",
-          });
-
-          return res.status(200).send("Usuário autenticado com sucesso!");
         } else return res.status(401).send(`Usuario ou senhas incorretas.`);
       }
     }

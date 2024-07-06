@@ -163,10 +163,10 @@ Content-Type: application/json
 
 # Rota para deletar um review: DELETE http://localhost:8080/review/delete/{reviewId}
 # reviewId: id do review que será deletado tipo: int
-DELETE http://localhost:8080/review/delete/1
+DELETE http://localhost:8080/review/delete/0abc63a3-41eb-457c-8167-3333eaab3088/1
 # Tipos de responses:
-# 200 - OK: Review deletado com sucesso
-# 404 - Not Found: Review não encontrado.
+# 200 - OK: Review removida com sucesso
+# 404 - Not Found: Review não encontrada.
 # 404 - Not Found: Usuário não encontrado.
 # 500 - Internal Server Error: Erro ao deletar review.
 ### FIM ROTA

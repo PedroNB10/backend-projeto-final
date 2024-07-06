@@ -20,7 +20,7 @@ app.use(cookieParser());
 let swaggerDocs = getSwaggerDocs();
 
 app.listen(port, () => {
-  console.log("Server is running on port localhost:" + port);
+  console.log("Server is running on port http://localhost:" + port);
 });
 
 app.use(express.json());
