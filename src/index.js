@@ -1,24 +1,26 @@
-import express, { json } from "express"; // lib para criar o servidor
+import express from "express"; // lib para criar o servidor
 import swaggerUI from "swagger-ui-express"; // lib para documentação das rotas
-import fs from "node:fs"; // lib para manipulação de arquivos json
+import cors from "cors"; // lib para permitir requisições de outros servidores
 
 import exampleRouter from "./routes/example.routes.js";
+import userRouter from "./routes/user.routes.js";
+import movieRouter from "./routes/movie.routes.js";
+import reviewRouter from "./routes/review.routes.js";
+import tokenRouter from "./routes/token.routes.js";
+import { createUserDatabaseFolder } from "./connection.db.js";
+import { getSwaggerDocs } from "./config.js";
+import cookieParser from "cookie-parser";
+
+createUserDatabaseFolder();
 
 const app = express();
 const port = 8080;
-
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cookieParser());
 // Lê o arquivo swagger.json e armazena em swaggerDocs
-let swaggerDocs = {};
+let swaggerDocs = getSwaggerDocs();
 
-try {
-  const filePath = "src/swagger.json";
-  const data = fs.readFileSync(filePath, "utf8");
-  swaggerDocs = JSON.parse(data);
-} catch (err) {
-  console.error("Error reading or parsing the JSON file:", err);
-}
-
-app.listen(8080, () => {
+app.listen(port, () => {
   console.log("Server is running on port localhost:" + port);
 });
 
@@ -32,3 +34,8 @@ app.get("/ping", (req, res) => {
 app.use("/example", exampleRouter); // usa todas as rotas do arquivo example.routes.js
 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+
+app.use("/user", userRouter);
+app.use("/movies", movieRouter);
+app.use("/review", reviewRouter);
+app.use("/token", tokenRouter);

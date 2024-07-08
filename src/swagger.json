@@ -1,8 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "API Recomendação de Filmes",
-    "description": ""
+    "title": "API de Filmes - Documentação",
+    "description": "API para gerenciamento de usuários, filmes favoritos e reviews.",
+    "version": "1.0.0"
   },
   "servers": [
     {
@@ -11,16 +12,677 @@
     }
   ],
   "paths": {
-    "/example": {
-      "get": {
-        "summary": "Rota Exemplo",
-        "description": "Rota Exemplo",
-        "tags": ["Rota de Exemplo"],
+    "/user/create": {
+      "post": {
+        "summary": "Criar Usuário",
+        "tags": ["Usuário"],
         "requestBody": {
-          "required": false,
-          "content": {}
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "username": "pedro",
+                  "email": "pedro@teste.com",
+                  "password": "pedro@teste.com"
+                }
+              }
+            }
+          }
         },
-        "responses": {}
+        "responses": {
+          "201": {
+            "description": "Usuário criado com sucesso"
+          },
+          "400": {
+            "description": "Preencha todos os campos obrigatórios."
+          },
+          "409": {
+            "description": "Usuário já existe."
+          },
+          "500": {
+            "description": "Erro ao criar usuário."
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "summary": "Login do Usuário",
+        "tags": ["Usuário"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "email": "pedro@teste.com",
+                  "password": "pedro@teste.com"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login realizado com sucesso"
+          },
+          "400": {
+            "description": "Preencha todos os campos obrigatórios."
+          },
+          "401": {
+            "description": "Email ou senha inválidos."
+          },
+          "404": {
+            "description": "Usuário não encontrado."
+          },
+          "500": {
+            "description": "Erro ao fazer login."
+          }
+        }
+      }
+    },
+    "/user/{userId}": {
+      "get": {
+        "summary": "Detalhes do Usuário",
+        "tags": ["Usuário"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do usuário"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "reviews": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "favoriteMovies": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID do usuário não foi informado"
+          },
+          "401": {
+            "description": "Token é obrigatório para acessar esse recurso"
+          },
+          "403": {
+            "description": "Token inválido"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          },
+          "500": {
+            "description": "Erro ao buscar usuário"
+          }
+        }
+      }
+    },
+    "/user/update-password/{userId}": {
+      "put": {
+        "summary": "Atualizar Senha do Usuário",
+        "tags": ["Usuário"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do usuário"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "currentPassword": {
+                    "type": "string"
+                  },
+                  "newPassword": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "currentPassword": "pedro@teste.com",
+                  "newPassword": "SenhaTeste2"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Senha atualizada com sucesso"
+          },
+          "400": {
+            "description": "Preencha todos os campos obrigatórios."
+          },
+          "401": {
+            "description": "Token é obrigatório para acessar esse recurso"
+          },
+          "403": {
+            "description": "Token inválido"
+          },
+          "404": {
+            "description": "Usuário não encontrado."
+          },
+          "500": {
+            "description": "Erro ao atualizar a senha."
+          }
+        }
+      }
+    },
+    "/user/update-email/{userId}": {
+      "put": {
+        "summary": "Atualizar Email do Usuário",
+        "tags": ["Usuário"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do usuário"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "currentEmail": {
+                    "type": "string"
+                  },
+                  "newEmail": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "currentEmail": "luara@email.com",
+                  "newEmail": "luaraupdate@email.com"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email atualizado com sucesso"
+          },
+          "400": {
+            "description": "Preencha todos os campos obrigatórios ou o novo email deve ser diferente do email cadastrado."
+          },
+          "401": {
+            "description": "Token é obrigatório para acessar esse recurso"
+          },
+          "403": {
+            "description": "Token inválido"
+          },
+          "404": {
+            "description": "Usuário não encontrado."
+          },
+          "409": {
+            "description": "O email já está em uso."
+          },
+          "500": {
+            "description": "Erro ao atualizar o email."
+          }
+        }
+      }
+    },
+    "/review/create": {
+      "post": {
+        "summary": "Criar Review",
+        "tags": ["Review"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string"
+                  },
+                  "rating": {
+                    "type": "integer"
+                  },
+                  "userId": {
+                    "type": "string"
+                  },
+                  "movieId": {
+                    "type": "integer"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "overview": {
+                    "type": "string"
+                  },
+                  "release_date": {
+                    "type": "string"
+                  },
+                  "poster_path": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "content": "This is an amazing movie",
+                  "rating": 5,
+                  "userId": "ce8a1fb1-5fe4-4513-a78c-fa86d80bb26f",
+                  "movieId": 112234,
+                  "title": "Inside Out 2",
+                  "overview": "Teenager Riley's mind headquarters is undergoing a sudden demolition...",
+                  "release_date": "2024-06-11",
+                  "poster_path": "/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Review criado com sucesso"
+          },
+          "400": {
+            "description": "Preencha todos os campos obrigatórios."
+          },
+          "401": {
+            "description": "Token é obrigatório para acessar esse recurso"
+          },
+          "403": {
+            "description": "Token inválido"
+          },
+          "404": {
+            "description": "Usuário não encontrado."
+          },
+          "500": {
+            "description": "Erro ao criar review."
+          }
+        }
+      }
+    },
+
+    "/review/update-review/{userId}/{reviewId}": {
+      "put": {
+        "summary": "Atualizar Review",
+        "tags": ["Review"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do usuário"
+          },
+          {
+            "name": "reviewId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID do review"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string"
+                  },
+                  "rating": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "content": "Bom filme",
+                  "rating": 4
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Review atualizado com sucesso"
+          },
+          "400": {
+            "description": "Preencha todos os campos obrigatórios."
+          },
+          "401": {
+            "description": "Token é obrigatório para acessar esse recurso"
+          },
+          "403": {
+            "description": "Token inválido"
+          },
+          "404": {
+            "description": "Usuário ou review não encontrado."
+          },
+          "500": {
+            "description": "Erro ao atualizar review."
+          }
+        }
+      }
+    },
+    "/review/delete/{userId}/{reviewId}": {
+      "delete": {
+        "summary": "Deletar Review",
+        "tags": ["Review"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do usuário"
+          },
+          {
+            "name": "reviewId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID do review"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review deletado com sucesso"
+          },
+          "401": {
+            "description": "Token é obrigatório para acessar esse recurso"
+          },
+          "403": {
+            "description": "Token inválido"
+          },
+          "404": {
+            "description": "Review não encontrado ou usuário não encontrado."
+          },
+          "500": {
+            "description": "Erro ao deletar review."
+          }
+        }
+      }
+    },
+    "/user/add/favorites": {
+      "put": {
+        "summary": "Adicionar Filme aos Favoritos",
+        "tags": ["Usuário"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string"
+                  },
+                  "movieId": {
+                    "type": "integer"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "overview": {
+                    "type": "string"
+                  },
+                  "release_date": {
+                    "type": "string"
+                  },
+                  "poster_path": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "userId": "20917be5-6558-4f78-a951-b6d4f485d4f9",
+                  "movieId": 11224,
+                  "title": "Inside Out 2",
+                  "overview": "Teenager Riley's mind headquarters is undergoing a sudden demolition...",
+                  "release_date": "2024-06-11",
+                  "poster_path": "/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Filme adicionado aos favoritos com sucesso"
+          },
+          "401": {
+            "description": "Token é obrigatório para acessar esse recurso"
+          },
+          "403": {
+            "description": "Token inválido"
+          },
+          "404": {
+            "description": "Filme não encontrado ou usuário não encontrado."
+          },
+          "500": {
+            "description": "Erro ao adicionar filme aos favoritos."
+          }
+        }
+      }
+    },
+    "/user/remove/favorites": {
+      "delete": {
+        "summary": "Remover Filme dos Favoritos",
+        "tags": ["Usuário"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string"
+                  },
+                  "movieId": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "userId": "9caff085-0649-405b-8c16-886436ccdf97",
+                  "movieId": 11224
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Filme removido dos favoritos com sucesso"
+          },
+          "401": {
+            "description": "Token é obrigatório para acessar esse recurso"
+          },
+          "403": {
+            "description": "Token inválido"
+          },
+          "404": {
+            "description": "Filme não encontrado ou usuário não encontrado."
+          },
+          "500": {
+            "description": "Erro ao remover filme dos favoritos."
+          }
+        }
+      }
+    },
+    "/movies/page/{page}": {
+      "get": {
+        "summary": "Listar Filmes da API Externa por Página",
+        "tags": ["Filmes"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Número da página"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Filmes encontrados"
+          },
+          "401": {
+            "description": "Token é obrigatório para acessar esse recurso"
+          },
+          "403": {
+            "description": "Token inválido"
+          },
+          "500": {
+            "description": "Erro ao buscar filmes da API externa."
+          }
+        }
+      }
+    },
+    "/movies/search/page/{searchPage}": {
+      "get": {
+        "summary": "Buscar Filmes da API Externa por Termo de Busca e Página",
+        "tags": ["Filmes"],
+        "parameters": [
+          {
+            "name": "searchPage",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Número da página"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Termo de busca"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Filmes encontrados"
+          },
+          "401": {
+            "description": "Token é obrigatório para acessar esse recurso"
+          },
+          "403": {
+            "description": "Token inválido"
+          },
+          "500": {
+            "description": "Erro ao buscar filmes da API externa."
+          }
+        }
+      }
+    },
+    "/token/generate-token": {
+      "get": {
+        "summary": "Generate access and refresh tokens",
+        "description": "Generates an access token and a refresh token for the user",
+        "tags": ["Authentication"],
+        "responses": {
+          "200": {
+            "description": "Tokens generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string",
+                      "description": "The generated access token"
+                    },
+                    "refreshToken": {
+                      "type": "string",
+                      "description": "The generated refresh token"
+                    }
+                  }
+                },
+                "example": {
+                  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
       }
     }
   }

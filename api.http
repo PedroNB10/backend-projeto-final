@@ -1,0 +1,237 @@
+# Rota para criar um usuário: POST http://localhost:8080/user/create
+# JSON contém os seguintes campos:
+# - username: nome do usuário tipo: string
+# - password: senha do usuário tipo: string
+# - email: email do usuário tipo: string
+POST http://localhost:8080/user/create
+Content-Type: application/json
+
+{
+  "username": "pedro",
+  "email": "pedro@teste.com",
+  "password": "pedro@teste.com"
+  
+}
+
+# Tipos de responses:
+# 201 - Created: Usuário criado com sucesso
+# 400 - Bad Request: Preencha todos os campos obrigatórios.
+# 409 - Conflict: Usuário já existe.
+# 500 - Internal Server Error: Erro ao criar usuário.
+### FIM ROTA
+
+
+# Rota para fazer login: POST http://localhost:8080/user/login
+# JSON contém os seguintes campos:
+# - email: email do usuário tipo: string
+# - password: senha do usuário tipo: string
+POST http://localhost:8080/user/login
+Content-Type: application/json
+
+
+{
+  "email": "pedro@teste.com",
+  "password": "pedro@teste.com"
+}
+
+# Tipos de responses:
+# 200 - OK: Login realizado com sucesso
+# 400 - Bad Request: Preencha todos os campos obrigatórios.
+# 401 - Unauthorized: Email ou senha inválidos.
+# 404 - Not Found: Usuário não encontrado.
+# 500 - Internal Server Error: Erro ao fazer login.
+### FIM ROTA
+
+
+
+
+# Rota para listar os filmes favoritos e avaliações de um usuário: GET http://localhost:8080/user/{userId}
+# userId: id do usuário tipo: string
+GET http://localhost:8080/user/703162ed-49c4-4374-a579-440122808b6a
+### 
+
+# Tipos de responses:
+# 200 - OK: Usuário encontrado, json: { "email": "email", "username": "username", "reviews": [], "favoriteMovies": [] }
+# 400 - Bad Request: ID do usuário não foi informado
+# 404 - Not Found: Usuário não encontrado
+# 500 - Internal Server Error: Erro ao buscar usuário
+### FIM ROTA
+
+
+# Rota para atualizar a senha de um usuário: PUT http://localhost:8080/user/update-password/{userId}
+# userId: id do usuário que terá a senha atualizada tipo: string
+
+# JSON contém os seguintes campos:
+# - currentPassword: senha atual do usuário tipo: string
+# - newPassword: nova senha do usuário tipo: string
+PUT http://localhost:8080/user/update-password/ce8a1fb1-5fe4-4513-a78c-fa86d80bb26f
+Content-Type: application/json
+
+{
+  "currentPassword": "pedro@teste.com",
+  "newPassword": "SenhaTeste2"
+}
+
+# Tipos de responses:
+# 200 - OK: Senha atualizada com sucesso
+# 400 - Bad Request: Preencha todos os campos obrigatórios.
+# 401 - Unauthorized: Senha atual inválida.
+# 404 - Not Found: Usuário não encontrado.
+# 500 - Internal Server Error: Erro ao atualizar a senha.
+### FIM ROTA 
+
+# Rota para atualizar o email de um usuário: PUT http://localhost:8080/user/update-email/{userId}
+# userId: id do usuário que terá o email atualizado tipo: string
+
+# JSON contém os seguintes campos:
+# - currentEmail: email atual do usuário tipo: string
+# - newEmail: novo email do usuário tipo: string
+PUT http://localhost:8080/user/update-email/ce8a1fb1-5fe4-4513-a78c-fa86d80bb26f
+Content-Type: application/json
+
+{
+  "currentEmail": "luara@email.com",
+  "newEmail": "luaraupdate@email.com"
+}
+
+# Tipos de responses:
+# 200 - OK: Email atualizado com sucesso
+# 400 - Bad Request: Preencha todos os campos obrigatórios.
+# 400 - Bad Request: O novo email deve ser diferente do email cadastrado
+# 404 - Not Found: Usuário não encontrado.
+# 409 - Conflict: O email já está em uso.
+# 500 - Internal Server Error: Erro ao atualizar o email.
+### FIM ROTA
+  
+# Rota para criar um review: POST http://localhost:8080/review/create
+
+# JSON contém os seguintes campos:
+# - content: conteúdo do review tipo: string
+# - rating: nota do review tipo: int
+# - userId: id do usuário que fez o review tipo: string
+# - movieId: id do filme que está sendo avaliado tipo: int
+# - title: título do filme tipo: string
+# - overview: descrição do filme tipo: string
+# - release_date: data de lançamento do filme tipo: string
+# - poster_path: caminho da imagem do filme tipo: string
+POST http://localhost:8080/review/create
+Content-Type: application/json
+
+{
+  "content": "Filme muito bom",
+  "rating": 5,
+  "userId": "703162ed-49c4-4374-a579-440122808b6a",
+  "movieId": 112234,
+  "title": "Inside Out 2",
+  "overview": "Teenager Riley's mind headquarters is undergoing a sudden demolition to make room for something entirely unexpected: new Emotions! Joy, Sadness, Anger, Fear and Disgust, who’ve long been running a successful operation by all accounts, aren’t sure how to feel when Anxiety shows up. And it looks like she’s not alone.",
+  "release_date": "2024-06-11",
+  "poster_path": "/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg"
+
+}
+
+# Tipos de responses:
+# 201 - Created: Review criado com sucesso
+# 200 - OK: Review atualizado com sucesso (acontece quando o usuário já fez um review para o filme)
+# 400 - Bad Request: Preencha todos os campos obrigatórios.
+# 404 - Not Found: Usuário não encontrado.
+# 500 - Internal Server Error: Erro ao criar review.
+### FIM ROTA
+
+
+# Rota para atualizar um review: PUT http://localhost:8080/review/update-review/{userId}/{reviewId}
+# userId: id do usuário que fez o review tipo: string
+# reviewId: id do review que será atualizado tipo: int
+
+# JSON contém os seguintes campos:
+# - content: conteúdo do review tipo: string
+# - rating: nota do review tipo: int
+PUT http://localhost:8080/review/update-review/703162ed-49c4-4374-a579-440122808b6a/3
+Content-Type: application/json
+
+{
+  "content": "Não é muito bom",
+  "rating": 2
+}
+
+# Tipos de responses:
+# 200 - OK: Review atualizado com sucesso
+# 400 - Bad Request: Preencha todos os campos obrigatórios.
+# 404 - Not Found: Usuário ou review não encontrado.
+# 500 - Internal Server Error: Erro ao atualizar review.
+### FIM ROTA
+
+
+# Rota para deletar um review: DELETE http://localhost:8080/review/delete/{reviewId}
+# reviewId: id do review que será deletado tipo: int
+DELETE http://localhost:8080/review/delete/703162ed-49c4-4374-a579-440122808b6a/3
+# Tipos de responses:
+# 200 - OK: Review removida com sucesso
+# 404 - Not Found: Review não encontrada.
+# 404 - Not Found: Usuário não encontrado.
+# 500 - Internal Server Error: Erro ao deletar review.
+### FIM ROTA
+
+
+
+
+
+# Rota para adicionar um filme aos favoritos de um usuário: PUT http://localhost:8080/user/add/favorites
+# JSON contém os seguintes campos:
+# - userId: id do usuário que está adicionando o filme aos favoritos tipo: string
+# - movieId: id do filme que está sendo adicionado aos favoritos tipo: int
+# - title: título do filme tipo: string
+# - overview: descrição do filme tipo: string
+# - release_date: data de lançamento do filme tipo: string
+# - poster_path: caminho da imagem do filme tipo: string
+PUT http://localhost:8080/user/add/favorites
+Content-Type: application/json
+
+{
+  "userId": "20917be5-6558-4f78-a951-b6d4f485d4f9",
+  "movieId": 11224,
+  "title": "Inside Out 2",
+  "overview": "Teenager Riley's mind headquarters is undergoing a sudden demolition to make room for something entirely unexpected: new Emotions! Joy, Sadness, Anger, Fear and Disgust, who’ve long been running a successful operation by all accounts, aren’t sure how to feel when Anxiety shows up. And it looks like she’s not alone.",
+  "release_date": "2024-06-11",
+  "poster_path": "/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg"
+}
+
+# Tipos de responses:
+# 200 - OK: Filme adicionado aos favoritos com sucesso
+# 404 - Not Found: Filme não encontrado.
+# 404 - Not Found: Usuário não encontrado.
+# 500 - Internal Server Error: Erro ao adicionar filme aos favoritos.
+
+### FIM ROTA
+
+# Rota para remover um filme dos favoritos de um usuário: DELETE http://localhost:8080/user/remove/favorites
+# JSON contém os seguintes campos:
+# - userId: id do usuário que está removendo o filme dos favoritos tipo: string
+# - movieId: id do filme que está sendo removido dos favoritos tipo: int
+DELETE http://localhost:8080/user/remove/favorites
+Content-Type: application/json
+
+{
+  "userId": "9caff085-0649-405b-8c16-886436ccdf97",
+  "movieId": 11224
+}
+
+# Tipos de responses:
+# 200 - OK: Filme removido dos favoritos com sucesso
+# 404 - Not Found: Filme não encontrado.
+# 404 - Not Found: Usuário não encontrado.
+# 500 - Internal Server Error: Erro ao remover filme dos favoritos.
+### FIM ROTA
+
+
+# Rota para listar os filmes da API externa: GET http://localhost:8080/movies/page/{page}
+# page: número da página que será listada tipo: int
+GET http://localhost:8080/movies/page/1
+### FIM ROTA
+
+
+# Rota para buscar filmes da API externa: GET http://localhost:8080/movies/search/page/{searchPage}?query={query}
+# searchPage: número da página que será listada tipo: int
+# query: termo de busca para a pesquisa tipo: string
+GET http://localhost:8080/movies/search/page/1?query=vingadores
+### FIM ROTA
+
