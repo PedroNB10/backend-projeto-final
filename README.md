@@ -1,4 +1,5 @@
-# Projeto Final Backend para a Matéria de programação Web
+# Projeto Final Backend Programação Web
+# CineReview
 
 ### Como Rodar o projeto
 
@@ -15,7 +16,7 @@ $ npm install
 # Execute a aplicação em modo de desenvolvimento
 $ npm run dev
 
-# O servidor inciará na porta:8080 - acesse <http://localhost:8080>
+# O servidor inciará na porta 8080 - acesse <http://localhost:8080>
 ```
 
 
@@ -25,3 +26,4 @@ $ npm run dev
 # Acesse a documentação da API
 $ http://localhost:8080/api-docs
 ```
+
